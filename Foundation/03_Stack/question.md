@@ -1,6 +1,6 @@
 # Question of Stack
 
-## Question 1
+## Question 1 
 Implement a stack using an array
 ## Question 2
 stack cpp in STL  
