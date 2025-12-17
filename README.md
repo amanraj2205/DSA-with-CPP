@@ -105,7 +105,7 @@ Algorithms used to arrange elements in a particular order (ascending or descendi
 
 -----
 
-### 8\. Tree
+### 8\. Tree  - Coming Soon
 
 A Tree is a non-linear, hierarchical data structure where elements are connected by edges.
 
@@ -115,7 +115,7 @@ A Tree is a non-linear, hierarchical data structure where elements are connected
       * **Binary Search Tree (BST)**: Ordered BT where the left child's value is less than the parent, and the right child's value is greater.
       * **Tree Traversal** methods: **Inorder, Preorder, Postorder, Level Order**.
 
-### 9\. Graph
+### 9\. Graph  - Coming Soon
 
 A Graph is a non-linear data structure consisting of a finite set of vertices (**nodes**) and a set of edges connecting them.
 
@@ -128,7 +128,7 @@ A Graph is a non-linear data structure consisting of a finite set of vertices (*
           * **Breadth-First Search (BFS)**
           * **Depth-First Search (DFS)**
 
-### 10\. Other Topics
+### 10\. Other Topics  - Coming Soon
 
 This section covers additional foundational concepts that are crucial for DSA proficiency.
 
