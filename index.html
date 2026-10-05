@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevStream - High Density Full Widescreen Deck</title>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 40%, #F3E8FF 100%);
+            --card-bg: #FFFFFF;
+            --text-main: #0F172A;
+            --text-muted: #334155;
+            
+            --c-blue: #0052FF;
+            --c-pink: #D946EF;
+            --c-orange: #FF6B00;
+            --c-red: #E11D48;
+            --c-teal: #059669;
+            --c-purple: #7C3AED;
+            
+            --card-shadow: 0 15px 35px -5px rgba(0,0,0,0.08), 0 5px 15px -3px rgba(0,0,0,0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Slide Container - Optimized for Widescreen Vertical Fill */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            scroll-snap-align: start;
+            padding: 40px 70px 50px 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(circle at 10% 20%, rgba(217, 70, 239, 0.06) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(0, 82, 255, 0.06) 0%, transparent 40%);
+            border-bottom: 2px solid rgba(226, 232, 240, 0.8);
+        }
+
+        /* Top Header Area */
+        .slide-header {
+            width: 100%;
+            max-width: 1300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #0052FF 0%, #7C3AED 50%, #D946EF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 4px 12px rgba(124, 58, 237, 0.15));
+        }
+
+        .section-title {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, #0052FF, #D946EF);
+            border-radius: 3px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        /* Middle Main Body - Takes Max Space */
+        .slide-body {
+            width: 100%;
+            max-width: 1300px;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        /* Grid Layouts */
+        .card-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+            height: 100%;
+            align-items: stretch;
+        }
+
+        .card-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            width: 100%;
+            height: 100%;
+            align-items: stretch;
+        }
+
+        /* Cards with Taller Content Padding & Dynamic Height */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 32px 35px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-top: 6px solid #0052FF;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card.mod-1 { border-top-color: var(--c-blue); }
+        .card.mod-1 h3 { color: var(--c-blue); }
+
+        .card.mod-2 { border-top-color: var(--c-pink); }
+        .card.mod-2 h3 { color: var(--c-pink); }
+
+        .card.mod-3 { border-top-color: var(--c-orange); }
+        .card.mod-3 h3 { color: var(--c-orange); }
+
+        .card.mod-4 { border-top-color: var(--c-red); }
+        .card.mod-4 h3 { color: var(--c-red); }
+
+        .card.mod-5 { border-top-color: var(--c-teal); }
+        .card.mod-5 h3 { color: var(--c-teal); }
+
+        .card h3 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card h4 {
+            color: #D97706;
+            font-size: 1.05rem;
+            margin: 15px 0 8px 0;
+            font-weight: 700;
+        }
+
+        .card p, .card li {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.65;
+        }
+
+        .card ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .card li {
+            margin-bottom: 8px;
+        }
+
+        /* Key Metrics Callout Block (Fills empty space inside cards) */
+        .card-footer-metric {
+            background: #F8FAFC;
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-top: 15px;
+            border-left: 4px solid #3B82F6;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1E293B;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Bottom Architecture Banner (Fills bottom slide whitespace) */
+        .bottom-pipeline-banner {
+            width: 100%;
+            max-width: 1300px;
+            background: #0F172A;
+            color: #FFFFFF;
+            border-radius: 16px;
+            padding: 16px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+        }
+
+        .pipeline-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+
+        .pipeline-step span.dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #38BDF8;
+        }
+
+        .pipeline-arrow {
+            color: #64748B;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        /* Team Badges */
+        .team-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .team-member-badge {
+            background: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            border: 2px solid transparent;
+            background-image: linear-gradient(#fff, #fff), linear-gradient(135deg, #0052FF, #D946EF, #FF6B00);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            color: #0F172A;
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .tag-blue { background: #E0EDFF; color: var(--c-blue); }
+        .tag-pink { background: #FCE7F3; color: var(--c-pink); }
+        .tag-orange { background: #FFEDD5; color: var(--c-orange); }
+        .tag-red { background: #FFE4E6; color: var(--c-red); }
+        .tag-teal { background: #D1FAE5; color: var(--c-teal); }
+
+        /* Slide Number Indicator */
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            font-size: 0.9rem;
+            color: #64748B;
+            font-weight: 800;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 6px 14px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Table Styling */
+        .tech-table {
+            width: 100%;
+            height: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.95rem;
+            background: #FFFFFF;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .tech-table th, .tech-table td {
+            padding: 16px 22px;
+            text-align: left;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .tech-table th {
+            background: #0F172A;
+            color: #38BDF8;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .tech-table td {
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1: Title Slide -->
+    <div class="slide">
+        <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+            <h1 class="hero-title">DEVSTREAM</h1>
+            <div class="subtitle" style="font-size: 1.5rem; margin-bottom: 25px;">Next-Gen Developer Portfolio & Technical Publishing Platform</div>
+            
+            <div style="margin-bottom: 35px; display: flex; gap: 12px;">
+                <span class="tag tag-blue">Spring Boot</span>
+                <span class="tag tag-pink">React.js</span>
+                <span class="tag tag-orange">PostgreSQL</span>
+                <span class="tag tag-red">MongoDB Atlas</span>
+                <span class="tag tag-teal">Python FastAPI</span>
+            </div>
+
+            <div style="color: var(--c-blue); font-weight: 800; letter-spacing: 1.5px; margin-bottom: 15px; font-size: 1rem;">PROJECT TEAM MEMBERS</div>
+            <div class="team-container">
+                <div class="team-member-badge">Aman Raj</div>
+                <div class="team-member-badge">Chitransh Sain</div>
+                <div class="team-member-badge">Aaradhya Sharma</div>
+                <div class="team-member-badge">Mahadev Prasad Yadav</div>
+                <div class="team-member-badge">Suman Kumar</div>
+            </div>
+        </div>
+        <div class="slide-number">01 / 12</div>
+    </div>
+
+    <!-- SLIDE 2: Vision & Core Concept -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2 class="section-title">Platform Vision & Problem Statement</h2>
+            <div class="subtitle">Solving the core gaps in traditional technical blogging platforms</div>
+        </div>
+        
+        <div class="slide-body">
+            <div class="card-grid-2">
+                <div class="card mod-1">
+                    <div>
+                        <h3>The Technical Gap <span class="tag tag-red">Current Limitation</span></h3>
+                        <p>Standard platforms (Medium, Dev.to) treat posts as simple static text without developer context:</p>
+                        <ul>
+                            <li>No integration between technical posts and real-time code execution activity.</li>
+                            <li>Lacks support for structured Software Requirements Specifications (SRS).</li>
+                            <li>No verifiable developer metrics linked directly to GitHub academic/professional profiles.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Impact: Inability to prove technical authorship</span>
+                        <strong style="color:var(--c-red);">High Friction</strong>
+                    </div>
+                </div>
+
+                <div class="card mod-2">
+                    <div>
+                        <h3>The DevStream Solution <span class="tag tag-teal">Innovation</span></h3>
+                        <p>A unified hybrid ecosystem linking software documentation with automated portfolio proof:</p>
+                        <ul>
+                            <li>Dual publication engine: Story Tutorials + Formal Technical Specs.</li>
+                            <li>Automated LLM Microservice generating instant TL;DR summaries and tags.</li>
+                            <li>Dynamic profile resumes pulling live commit activity and published post analytics.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Target Outcome: Automated Verified Portfolio</span>
+                        <strong style="color:var(--c-teal);">100% Verifiable</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-pipeline-banner">
+            <div class="pipeline-step"><span class="dot" style="background:#0052FF;"></span> Full-Stack Publishing</div>
+            <div class="pipeline-arrow">&rarr;</div>
+            <div class="pipeline-step"><span class="dot" style="background:#D946EF;"></span> Markdown & SRS Editor</div>
+            <div class="pipeline-arrow">&rarr;</div>
+            <div class="pipeline-step"><span class="dot" style="background:#059669;"></span> AI Auto-Summarizer</div>
+            <div class="pipeline-arrow">&rarr;</div>
+            <div class="pipeline-step"><span class="dot" style="background:#FF6B00;"></span> Live GitHub Portfolio</div>
+        </div>
+        <div class="slide-number">02 / 12</div>
+    </div>
+
+    <!-- SLIDE 3: Global System Architecture (Direct Fix for attached image) -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2 class="section-title">Global Architecture & Polyglot Stack</h2>
+            <div class="subtitle">Decoupled microservices engineered for high performance and elasticity</div>
+        </div>
+
+        <div class="slide-body">
+            <div class="card-grid-3">
+                <div class="card mod-2">
+                    <div>
+                        <h3>Frontend Layer <span class="tag tag-pink">React 18</span></h3>
+                        <p style="margin-top: 10px;">Modern Single Page Application (SPA) designed for split-second rendering:</p>
+                        <ul>
+                            <li>Tailwind CSS modular design system.</li>
+                            <li>CodeMirror Markdown split editor.</li>
+                            <li>Live client-side syntax highlighting.</li>
+                            <li>Axios interceptors for JWT auth.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Client Bundle SLA:</span>
+                        <strong style="color:var(--c-pink);">&lt; 1.2s FCP</strong>
+                    </div>
+                </div>
+
+                <div class="card mod-1">
+                    <div>
+                        <h3>Core Backend Engine <span class="tag tag-blue">Spring Boot</span></h3>
+                        <p style="margin-top: 10px;">Robust RESTful service handling security, data routing, and caching:</p>
+                        <ul>
+                            <li>Spring Security JWT Stateless Auth.</li>
+                            <li>Role-Based Access Control (RBAC).</li>
+                            <li>Redis write-behind caching buffers.</li>
+                            <li>Cross-database orchestration layer.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>API Response Target:</span>
+                        <strong style="color:var(--c-blue);">&lt; 80ms Avg</strong>
+                    </div>
+                </div>
+
+                <div class="card mod-5">
+                    <div>
+                        <h3>AI Microservice <span class="tag tag-teal">FastAPI</span></h3>
+                        <p style="margin-top: 10px;">Isolated Python service executing async NLP and LLM processing:</p>
+                        <ul>
+                            <li>LangChain framework orchestration.</li>
+                            <li>Llama/OpenAI async text summarization.</li>
+                            <li>Automated technical keyword extraction.</li>
+                            <li>Non-blocking Spring background jobs.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Inference Model SLA:</span>
+                        <strong style="color:var(--c-teal);">Async Non-Blocking</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full Page Visual Banner filling bottom whitespace -->
+        <div class="bottom-pipeline-banner">
+            <div class="pipeline-step"><span class="dot" style="background:#D946EF;"></span> React UI (Client)</div>
+            <div class="pipeline-arrow">&rarr;</div>
+            <div class="pipeline-step"><span class="dot" style="background:#0052FF;"></span> Spring Boot Gateway / JWT</div>
+            <div class="pipeline-arrow">&rarr;</div>
+            <div class="pipeline-step"><span class="dot" style="background:#7C3AED;"></span> Redis Cache / Write Buffer</div>
+            <div class="pipeline-arrow">&rarr;</div>
+            <div class="pipeline-step"><span class="dot" style="background:#059669;"></span> FastAPI NLP Pipeline</div>
+            <div class="pipeline-arrow">&rarr;</div>
+            <div class="pipeline-step"><span class="dot" style="background:#FF6B00;"></span> PostgreSQL & MongoDB</div>
+        </div>
+        <div class="slide-number">03 / 12</div>
+    </div>
+
+    <!-- SLIDE 4: Polyglot Persistence Architecture -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2 class="section-title">Polyglot Persistence Architecture</h2>
+            <div class="subtitle">Optimized data separation for structured vs document-based entities</div>
+        </div>
+
+        <div class="slide-body">
+            <div class="card-grid-2">
+                <div class="card mod-3">
+                    <div>
+                        <h3>PostgreSQL (Relational Storage) <span class="tag tag-orange">ACID Compliant</span></h3>
+                        <p>Stores strict transactional and relational relational entity structures:</p>
+                        <ul>
+                            <li>User Authentication Mapping & Security Credentials.</li>
+                            <li>Role-Based Access Control (`STUDENT`, `MODERATOR`, `ADMIN`).</li>
+                            <li>Immutable Audit Logs for platform governance actions.</li>
+                            <li>Profile Metadata, Academic Verification & Badges.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Data Integrity Guarantee:</span>
+                        <strong style="color:var(--c-orange);">Strict FKs & Indexing</strong>
+                    </div>
+                </div>
+
+                <div class="card mod-4">
+                    <div>
+                        <h3>MongoDB Atlas (Document Engine) <span class="tag tag-red">High Throughput</span></h3>
+                        <p>Handles dynamic, high-volume content objects without schema rigidness:</p>
+                        <ul>
+                            <li>Full Article Markdown Text & Rendered AST trees.</li>
+                            <li>Nested Revision History and Code Difference tracking.</li>
+                            <li>AI-generated Abstracts, Bullet points & Auto-Tags.</li>
+                            <li>Draft States, Metadata Flags & Aggregated Counters.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Storage Optimization:</span>
+                        <strong style="color:var(--c-red);">BSON Binary Storage</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-pipeline-banner">
+            <div class="pipeline-step"><span class="dot" style="background:#FF6B00;"></span> Relational Queries (SQL)</div>
+            <div class="pipeline-arrow">&harr;</div>
+            <div class="pipeline-step"><span class="dot" style="background:#0052FF;"></span> Spring Boot JPA / Mongo Templates</div>
+            <div class="pipeline-arrow">&harr;</div>
+            <div class="pipeline-step"><span class="dot" style="background:#E11D48;"></span> Unstructured Documents (NoSQL)</div>
+        </div>
+        <div class="slide-number">04 / 12</div>
+    </div>
+
+    <!-- SLIDE 5: Module 1 Breakdown -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2 class="section-title">Module 1: Discovery & Feed Engine</h2>
+            <div class="subtitle">High-throughput search and feed indexing portal</div>
+        </div>
+
+        <div class="slide-body">
+            <div class="card-grid-2">
+                <div class="card mod-1">
+                    <div>
+                        <h3>Scope & Core Features <span class="tag tag-blue">Chitransh Sain</span></h3>
+                        <p>Manages content discovery and reader traffic routing:</p>
+                        <ul>
+                            <li>Paginated feed APIs with custom sorting (Latest, Trending).</li>
+                            <li>Multi-tag filtering (`#Java`, `#FastAPI`, `#Architecture`).</li>
+                            <li>Full-text search indexed across titles, abstracts, and tags.</li>
+                            <li>Infinite scroll UI layout built with React Query.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Lead Architect: Chitransh Sain</span>
+                        <span class="tag tag-blue">Module 1</span>
+                    </div>
+                </div>
+
+                <div class="card mod-1">
+                    <div>
+                        <h3>Engineering Challenge & Solution</h3>
+                        <h4>Challenge: Database View Counter Bottlenecks</h4>
+                        <p>Incrementing article view counts directly in MongoDB on every request created massive database write lockups under heavy traffic.</p>
+
+                        <h4>Solution: Redis Write-Behind Buffer</h4>
+                        <p>Implemented an in-memory Redis buffer that aggregates click events in memory and flushes updates to MongoDB in periodic async batches.</p>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Performance Improvement:</span>
+                        <strong style="color:var(--c-blue);">92% DB Write Reduction</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">05 / 12</div>
+    </div>
+
+    <!-- SLIDE 6: Module 2 Breakdown -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2 class="section-title">Module 2: Editor & Writing Suite</h2>
+            <div class="subtitle">Rich technical documentation authoring environment</div>
+        </div>
+
+        <div class="slide-body">
+            <div class="card-grid-2">
+                <div class="card mod-2">
+                    <div>
+                        <h3>Scope & Core Features <span class="tag tag-pink">Aaradhya Sharma</span></h3>
+                        <p>Authoring tools tailored specifically for technical content:</p>
+                        <ul>
+                            <li>Split-screen WYSIWYG / Markdown live preview editor.</li>
+                            <li>Code block syntax highlighting & inline LaTeX math support.</li>
+                            <li>Drag-and-drop image uploads with cloud storage integration.</li>
+                            <li>Complete publication lifecycle.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Lead Architect: Aaradhya Sharma</span>
+                        <span class="tag tag-pink">Module 2</span>
+                    </div>
+                </div>
+
+                <div class="card mod-2">
+                    <div>
+                        <h3>Engineering Challenge & Solution</h3>
+                        <h4>Challenge: Background Auto-Save Race Conditions</h4>
+                        <p>Frequent background auto-save triggers created out-of-order API responses, resulting in newer drafts being overwritten by older requests.</p>
+
+                        <h4>Solution: Debouncing & Version Locking.</h4>
+                        <p>Applied 1.5s client-side request debouncing paired with optimistic document version locking (`@Version`) to reject out-of-order updates.</p>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Concurrency Guarantee:</span>
+                        <strong style="color:var(--c-pink);">Zero Data Overwrites</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">06 / 12</div>
+    </div>
+
+    <!-- SLIDE 7: Module 3 Breakdown -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2 class="section-title">Module 3: Profile & Portfolio Aggregator</h2>
+            <div class="subtitle">Dynamic developer portfolio generator with live integrations</div>
+        </div>
+
+        <div class="slide-body">
+            <div class="card-grid-2">
+                <div class="card mod-3">
+                    <div>
+                        <h3>Scope & Core Features <span class="tag tag-orange">Aman Raj</span></h3>
+                        <p>Transforms author profiles into verified technical resumes:</p>
+                        <ul>
+                            <li>Aggregated profile dashboard (Bio, Skill Matrix, Post Stats).</li>
+                            <li>Live GitHub REST API integration (Pinned Repositories & Stars).</li>
+                            <li>Cross-database query bridge connecting PostgreSQL and MongoDB.</li>
+                            <li>Exportable dynamic developer resume cards.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Lead Architect: Aman Raj</span>
+                        <span class="tag tag-orange">Module 3</span>
+                    </div>
+                </div>
+
+                <div class="card mod-3">
+                    <div>
+                        <h3>Engineering Challenge & Solution:</h3>
+                        <h4>Challenge: GitHub Rate Limits & Cross-DB Latency.</h4>
+                        <p>External API rate limits (HTTP 429) and join latency across SQL and NoSQL databases slowed down profile page load times.</p>
+
+                        <h4>Solution: Parallel Async Execution & Circuit Breaker</h4>
+                        <p>Executed parallel async calls via `CompletableFuture` and protected GitHub endpoints using Resilience4j circuit breakers with cached fallbacks.</p>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Latency Reduction:</span>
+                        <strong style="color:var(--c-orange);">&lt; 350ms Page Response</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">07 / 12</div>
+    </div>
+
+    <!-- SLIDE 8: Module 4 Breakdown -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2 class="section-title">Module 4: Governance & Moderation Portal</h2>
+            <div class="subtitle">Platform safety, compliance, and administrative controls</div>
+        </div>
+
+        <div class="slide-body">
+            <div class="card-grid-2">
+                <div class="card mod-4">
+                    <div>
+                        <h3>Scope & Core Features <span class="tag tag-red">Mahadev Prasad Yadav</span></h3>
+                        <p>Ensures content quality and regulatory platform compliance:</p>
+                        <ul>
+                            <li>Spring Security Role-Based Access Control (RBAC).</li>
+                            <li>Moderation queue for reported articles & offensive keywords.</li>
+                            <li>User suspension, promotion controls, and immutable audit logs.</li>
+                            <li>Automated spam flagging filters.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Lead Architect: Mahadev Prasad Yadav</span>
+                        <span class="tag tag-red">Module 4</span>
+                    </div>
+                </div>
+
+                <div class="card mod-4">
+                    <div>
+                        <h3>Engineering Challenge & Solution</h3>
+                        <h4>Challenge: Bulk Action Lockouts & Dead Feed Links</h4>
+                        <p>Hiding multiple spam posts simultaneously risked locking database collections or leaving dead cached links in user feeds.</p>
+
+                        <h4>Solution: Async Batch Flags & Cache Eviction</h4>
+                        <p>Applied non-blocking asynchronous batch updates and triggered instant Redis feed cache invalidation hooks upon moderation actions.</p>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Cache Invalidation:</span>
+                        <strong style="color:var(--c-red);">&lt; 10ms Global Eviction</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">08 / 12</div>
+    </div>
+
+    <!-- SLIDE 9: Module 5 Breakdown -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2 class="section-title">Module 5: AI Summarizer & Tag Generator</h2>
+            <div class="subtitle">Automated intelligent content enhancement service</div>
+        </div>
+
+        <div class="slide-body">
+            <div class="card-grid-2">
+                <div class="card mod-5">
+                    <div>
+                        <h3>Scope & Core Features <span class="tag tag-teal">Suman Kumar</span></h3>
+                        <p>Powers intelligent automated text augmentation:</p>
+                        <ul>
+                            <li>Isolated Python FastAPI microservice integrated with LangChain / LLMs.</li>
+                            <li>Automated 2-3 sentence "TL;DR" abstract generation.</li>
+                            <li>Natural Language Processing (NLP) technical tag extraction.</li>
+                            <li>Content readability scoring engine.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Lead Architect: Suman Kumar</span>
+                        <span class="tag tag-teal">Module 5</span>
+                    </div>
+                </div>
+
+                <div class="card mod-5">
+                    <div>
+                        <h3>Engineering Challenge & Solution</h3>
+                        <h4>Challenge: Inference Latency & Save Timeouts</h4>
+                        <p>LLM generation takes several seconds; running inference synchronously during article save caused HTTP gateway timeouts on main backend.</p>
+
+                        <h4>Solution: Non-Blocking Background Job Queue</h4>
+                        <p>Decoupled article saving from AI inference using Spring `@Async` background queues with graceful fallback handling if LLM is busy.</p>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>UX Impact:</span>
+                        <strong style="color:var(--c-teal);">Zero User Save Delay</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">09 / 12</div>
+    </div>
+
+    <!-- SLIDE 10: Technical Challenges Matrix -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2 class="section-title">Engineering Challenges Summary Matrix</h2>
+            <div class="subtitle">Consolidated overview of complex technical roadblocks solved</div>
+        </div>
+
+        <div class="slide-body">
+            <table class="tech-table">
+                <thead>
+                    <tr>
+                        <th>Module & Lead</th>
+                        <th>Technical Challenge</th>
+                        <th>Engineering Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong style="color:var(--c-blue);">Mod 1:</strong> Chitransh Sain </td>
+                        <td>View counter write bottlenecks under high traffic.</td>
+                        <td>Redis write-behind buffer for batch flushing[span_65].</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color:var(--c-pink);">Mod 2:</strong> Aaradhya Sharma</td>
+                        <td>Auto-save race conditions overwriting newer drafts.</td>
+                        <td>Request debouncing + optimistic document version locking.</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color:var(--c-orange);">Mod 3:</strong> Aman Raj</td>
+                        <td>GitHub API rate limits & cross-database latency.</td>
+                        <td>`CompletableFuture` parallel queries + Resilience4j circuit breaker.</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color:var(--c-red);">Mod 4:</strong> Mahadev Prasad Yadav</td>
+                        <td>Bulk moderation actions locking DB or leaving dead links.</td>
+                        <td>Async batch flag updates + instant Redis cache invalid.</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color:var(--c-teal);">Mod 5:</strong> Suman Kumar</td>
+                        <td>LLM inference latency blocking main post-saving.</td>
+                        <td>Non-blocking `@Async` background queues + fallback handlers.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="slide-number">10 / 12</div>
+    </div>
+
+    <!-- SLIDE 11: 10-Week Execution Roadmap -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2 class="section-title">10-Week Implementation Roadmap</h2>
+            <div class="subtitle">Agile execution schedule from baseline setup to production deployment</div>
+        </div>
+
+        <div class="slide-body">
+            <div class="card-grid-2">
+                <div class="card mod-1">
+                    <div>
+                        <h3>Phase 1 & 2 (Weeks 1 - 6)</h3>
+                        <p><strong>Foundation & Feature Construction:</strong></p>
+                        <ul>
+                            <li>PostgreSQL & MongoDB schema baselines established.</li>
+                            <li>Spring Security JWT auth & RBAC configurations.</li>
+                            <li>Markdown editor auto-save & HTML sanitization.</li>
+                            <li>Python FastAPI microservice setup.</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Milestone 1 Deliverable:</span>
+                        <strong style="color:var(--c-blue);">Core Auth & Publishing API</strong>
+                    </div>
+                </div>
+
+                <div class="card mod-2">
+                    <div>
+                        <h3>Phase 3 & 4 (Weeks 7 - 10)</h3>
+                        <p><strong>Integration, Optimization & Launch:</strong></p>
+                        <ul>
+                            <li>Java-to-Python async background queues</li>
+                            <li>Parallel cross-database profile aggregator </li>
+                            <li>Security penetration testing (XSS, Privilege Escalation)</li>
+                            <li>Docker containerization & production deployment</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-metric">
+                        <span>Milestone 2 Deliverable:</span>
+                        <strong style="color:var(--c-pink);">Production Launch Ready</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">11 / 12</div>
+    </div>
+
+    <!-- SLIDE 12: Conclusion & Q/A -->
+    <div class="slide">
+        <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+            <h1 class="hero-title">THANK YOU</h1>
+            <div class="subtitle" style="font-size: 1.5rem; margin-bottom: 25px;">DevStream — Engineering Better Technical Documentation & Developer Portfolios</div>
+            
+            <div class="team-container" style="margin-top: 20px;">
+                <div class="team-member-badge">Aman Raj</div>
+                <div class="team-member-badge">Chitransh Sain</div>
+                <div class="team-member-badge">Aaradhya Sharma</div>
+                <div class="team-member-badge">Mahadev Prasad Yadav</div>
+                <div class="team-member-badge">Suman Kumar</div>
+            </div>
+
+            <div style="margin-top: 45px; color: var(--c-blue); font-size: 1.4rem; font-weight: 800; letter-spacing: 1px;">
+                OPEN FOR QUESTIONS & DEMO SESSION
+            </div>
+        </div>
+        <div class="slide-number">12 / 12</div>
+    </div>
+
+</body>
+</html>
